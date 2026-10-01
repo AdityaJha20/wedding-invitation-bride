@@ -200,7 +200,7 @@ describe('Wedding Invitation API Test Suite', () => {
         {
           _id: '2',
           name: 'Amit Kumar',
-          wishes: 'Heartiest congratulations to Sarthak and Manya!',
+          wishes: 'Heartiest congratulations to Manya and Sarthak!',
           createdAt: new Date('2026-09-24T18:30:00Z'),
         },
       ];

@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
 
-const DEFAULT_DB_NAME = 'wedding_invitation';
+// Ensure reliable SRV resolution on Windows environments
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch {
+  // Ignore fallback
+}
 
 export const connectDB = async (): Promise<typeof mongoose> => {
   const uri = process.env.MONGODB_URI;
@@ -13,11 +19,11 @@ export const connectDB = async (): Promise<typeof mongoose> => {
 
   try {
     const conn = await mongoose.connect(uri, {
-      dbName: DEFAULT_DB_NAME,
       serverSelectionTimeoutMS: 5000,
     });
 
-    console.log(`[Database] MongoDB Atlas Connected: ${conn.connection.host}/${DEFAULT_DB_NAME}`);
+    const activeDbName = conn.connection.name || 'bride_wedding_invitation';
+    console.log(`[Database] MongoDB Atlas Connected: ${conn.connection.host}/${activeDbName}`);
     return conn;
   } catch (error) {
     console.error('[Database] MongoDB connection error:', (error as Error).message);

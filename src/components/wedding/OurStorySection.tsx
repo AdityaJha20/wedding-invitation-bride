@@ -241,36 +241,14 @@ export const OurStorySection: React.FC = () => {
 
             {/* Main Heading: High-Contrast Royal Serif */}
             <h2 className="story-couple-heading">
-              Sarthak <span className="story-script-amp">&amp;</span> Manya
+              Manya <span className="story-script-amp">&amp;</span> Sarthak
             </h2>
 
             {/* Family Lineage Columns */}
             <div className="story-lineage-container">
               <div className="story-lineage-grid" ref={lineageRef}>
-                {/* Sarthak's Family Lineage */}
-                <div className="story-lineage-left">
-                  <div className="story-lineage-stack">
-                    <div>
-                      <span className="story-lineage-role">Son of</span>
-                      <p className="story-lineage-parents">
-                        Mr. Pardeep Kumar Sharma
-                        <br />
-                        Smt. Tanuja Sharma
-                      </p>
-                    </div>
-                    <div className="story-lineage-grandparents-block">
-                      <span className="story-lineage-role">Grandson of</span>
-                      <p className="story-lineage-grandparents">
-                        Late Shri Kailash Chandra Sharma
-                        <br />
-                        Smt. Kanta Sharma
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Manya's Family Lineage */}
-                <div className="story-lineage-right">
+                <div className="story-lineage-left">
                   <div className="story-lineage-stack">
                     <div>
                       <span className="story-lineage-role">Daughter of</span>
@@ -286,6 +264,28 @@ export const OurStorySection: React.FC = () => {
                         Late Shri Om Prakash Gandhi
                         <br />
                         Late Smt. Saroj Gandhi
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sarthak's Family Lineage */}
+                <div className="story-lineage-right">
+                  <div className="story-lineage-stack">
+                    <div>
+                      <span className="story-lineage-role">Son of</span>
+                      <p className="story-lineage-parents">
+                        Mr. Pardeep Kumar Sharma
+                        <br />
+                        Smt. Tanuja Sharma
+                      </p>
+                    </div>
+                    <div className="story-lineage-grandparents-block">
+                      <span className="story-lineage-role">Grandson of</span>
+                      <p className="story-lineage-grandparents">
+                        Late Shri Kailash Chandra Sharma
+                        <br />
+                        Smt. Kanta Sharma
                       </p>
                     </div>
                   </div>

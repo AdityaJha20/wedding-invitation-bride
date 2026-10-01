@@ -177,7 +177,7 @@ export const OpeningSplitScene: React.FC<OpeningSplitSceneProps> = ({ onOpenComp
         >
           <div className="wax-seal-frame">
             <img
-              src="/images/Gemini_Generated_Image_wtczcawtczcawtcz.png"
+              src="/images/ms-wax-seal.png"
               alt="SM Wax Seal Stamp"
               className="wax-seal-image"
               draggable={false}

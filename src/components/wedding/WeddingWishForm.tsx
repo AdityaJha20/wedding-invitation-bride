@@ -113,7 +113,7 @@ export const WeddingWishForm: React.FC<WeddingWishFormProps> = ({ onWishSubmitte
             <p className="wish-success-message">
               Your response has been received with warmth and joy.
             </p>
-            <p className="wish-success-signoff">— Sarthak &amp; Manya</p>
+            <p className="wish-success-signoff">— Manya &amp; Sarthak</p>
 
             <button
               type="button"
@@ -162,7 +162,7 @@ export const WeddingWishForm: React.FC<WeddingWishFormProps> = ({ onWishSubmitte
                   setWish(e.target.value);
                   if (errorMessage) setErrorMessage(null);
                 }}
-                placeholder="Leave a message for Sarthak & Manya..."
+                placeholder="Leave a message for Manya & Sarthak..."
                 className="wish-textarea"
                 rows={4}
                 required

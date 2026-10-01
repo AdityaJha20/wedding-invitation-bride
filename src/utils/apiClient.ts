@@ -1,4 +1,4 @@
-// API Client for Sarthak & Manya Wedding Platform
+// API Client for Manya & Sarthak Wedding Platform
 
 export interface ApiResponse<T = any> {
   success: boolean;

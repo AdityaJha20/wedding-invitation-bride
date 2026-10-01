@@ -13,7 +13,7 @@ const startServer = async () => {
 
     const server = app.listen(Number(PORT), '0.0.0.0', () => {
       console.log(`\n=================================================`);
-      console.log(`💍 Sarthak & Manya Wedding Backend Server`);
+      console.log(`💍 Manya & Sarthak Wedding Backend Server`);
       console.log(`🚀 Running at: http://localhost:${PORT}`);
       console.log(`🔒 Health Check: http://localhost:${PORT}/api/health`);
       console.log(`💌 Wishes API: http://localhost:${PORT}/api/wishes`);

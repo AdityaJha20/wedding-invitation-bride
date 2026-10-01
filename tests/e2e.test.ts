@@ -25,7 +25,7 @@ describe('Full End-to-End MongoDB Architecture & Flow Verification', () => {
 
     // Connect Mongoose to the live database
     await mongoose.connect(uri, {
-      dbName: 'wedding_invitation',
+      dbName: 'bride_wedding_invitation',
     });
 
     // Seed test Admin account with bcrypt hash
@@ -46,9 +46,9 @@ describe('Full End-to-End MongoDB Architecture & Flow Verification', () => {
   });
 
   // 1. Verify Database Connectivity & Collection Schemas
-  it('1. MongoDB Connectivity: connects to database wedding_invitation and creates collections', async () => {
+  it('1. MongoDB Connectivity: connects to database bride_wedding_invitation and creates collections', async () => {
     expect(mongoose.connection.readyState).toBe(1); // 1 = connected
-    expect(mongoose.connection.name).toBe('wedding_invitation');
+    expect(mongoose.connection.name).toBe('bride_wedding_invitation');
 
     const admin = await Admin.findOne({ email: adminEmail });
     expect(admin).not.toBeNull();
@@ -63,7 +63,7 @@ describe('Full End-to-End MongoDB Architecture & Flow Verification', () => {
       .post('/api/wishes')
       .send({
         name: 'Aarav Mehta',
-        wishes: 'Wishing Sarthak and Manya a blissful married life filled with endless joy!',
+        wishes: 'Wishing Manya and Sarthak a blissful married life filled with endless joy!',
       });
 
     expect(res.status).toBe(201);

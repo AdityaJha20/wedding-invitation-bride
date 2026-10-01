@@ -64,7 +64,7 @@ const CELEBRATION_SCHEDULE: CelebrationDay[] = [
       {
         id: 'haldi',
         time: '10:00 AM',
-        title: 'Haldi',
+        title: 'Haldi / Bangle Ceremony',
         sanskrit: '॥ हरिद्रा मंगलम् ॥',
         subtitle: 'Sunlit Turmeric & Auspicious Rituals',
         icon: 'flare',
@@ -191,7 +191,7 @@ export const WeddingDetailsBlock: React.FC = () => {
         {/* Footer Micro Sign-off */}
         <footer className="details-footer-accent">
           <span className="details-footer-dot" aria-hidden="true" />
-          <span className="details-footer-text">CEREMONIAL ITINERARY • SARTHAK &amp; MANYA</span>
+          <span className="details-footer-text">CEREMONIAL ITINERARY • MANYA &amp; SARTHAK</span>
           <span className="details-footer-dot" aria-hidden="true" />
         </footer>
       </div>

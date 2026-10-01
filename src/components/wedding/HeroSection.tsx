@@ -45,14 +45,14 @@ export const HeroSection: React.FC = () => {
             onClick={triggerPetalShower}
             role="button"
             tabIndex={0}
-            aria-label="Royal Ornate SM Monogram Crest — Tap to shower petals"
+            aria-label="Royal Ornate MS Monogram Crest — Tap to shower petals"
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') triggerPetalShower();
             }}
           >
             <img
-              src="/images/hero-logo-transparent.png"
-              alt="Royal Ornate SM Monogram Crest"
+              src="/images/ms-hero-crest-transparent.png"
+              alt="Royal Ornate MS Monogram Crest"
               className="hero-crest-img"
               loading="eager"
             />
@@ -60,7 +60,7 @@ export const HeroSection: React.FC = () => {
 
           {/* 4. LUXURY COUPLE NAMES */}
           <h1 className="couple-names-headline">
-            Sarthak <span className="weds-accent">Weds</span> Manya
+            Manya <span className="weds-accent">Weds</span> Sarthak
           </h1>
 
           {/* 5. WEDDING SUBTITLE */}
@@ -72,7 +72,7 @@ export const HeroSection: React.FC = () => {
           <div className="couple-artwork-frame">
             <img
               src="/images/cinematic_3d_animation_couple_portrait_of_manya_and_sarthak_in_traditional.png"
-              alt="Sarthak and Manya in traditional wedding attire looking joyfully up towards their wedding crest"
+              alt="Manya and Sarthak in traditional wedding attire looking joyfully up towards their wedding crest"
               className="couple-artwork-img"
               loading="eager"
             />

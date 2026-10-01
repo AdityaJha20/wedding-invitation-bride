@@ -78,7 +78,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <header className="admin-dashboard-header">
           <div className="admin-brand">
             <h1>Guest Blessings</h1>
-            <p>Sarthak &amp; Manya Wedding</p>
+            <p>Manya &amp; Sarthak Wedding</p>
           </div>
 
           <div className="admin-actions">

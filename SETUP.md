@@ -1,6 +1,6 @@
-# Sarthak & Manya Wedding Invitation — Data Architecture & Backend Setup
+# Manya & Sarthak Wedding Invitation — Data Architecture & Backend Setup
 
-This document describes the complete architecture, setup, configuration, and deployment procedures for the **Sarthak & Manya Wedding Invitation** platform.
+This document describes the complete architecture, setup, configuration, and deployment procedures for the **Manya & Sarthak Wedding Invitation** platform.
 
 ---
 
@@ -185,7 +185,7 @@ Health check endpoint.
 ```json
 {
   "status": "ok",
-  "message": "Sarthak & Manya Wedding API is healthy",
+  "message": "Manya & Sarthak Wedding API is healthy",
   "timestamp": "2026-09-25T12:00:00.000Z"
 }
 ```

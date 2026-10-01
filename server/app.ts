@@ -71,7 +71,7 @@ export const createApp = (): Application => {
   app.get('/api/health', (_req: Request, res: Response) => {
     res.status(200).json({
       status: 'ok',
-      message: 'Sarthak & Manya Wedding API is healthy',
+      message: 'Manya & Sarthak Wedding API is healthy',
       timestamp: new Date().toISOString(),
     });
   });

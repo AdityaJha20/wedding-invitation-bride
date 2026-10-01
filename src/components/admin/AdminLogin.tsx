@@ -53,7 +53,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
               <span className="admin-ornament-icon">❖</span>
               <span className="admin-ornament-line" />
             </div>
-            <p className="admin-subtitle">Sarthak &amp; Manya Wedding</p>
+            <p className="admin-subtitle">Manya &amp; Sarthak Wedding</p>
             <h1 className="admin-title">Admin Portal</h1>
           </header>
 

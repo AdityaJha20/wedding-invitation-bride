@@ -23,8 +23,8 @@ const run = async () => {
     process.exit(1);
   }
 
-  if (password.length < 8) {
-    console.error('\n❌ ERROR: Admin password must be at least 8 characters long for security.\n');
+  if (password.length < 6) {
+    console.error('\n❌ ERROR: Admin password must be at least 6 characters long.\n');
     process.exit(1);
   }
 

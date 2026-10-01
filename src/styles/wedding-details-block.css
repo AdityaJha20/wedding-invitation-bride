@@ -1,6 +1,6 @@
 /* ==========================================================================
    Wedding Details / Celebrations Timeline — Heirloom Stationery Insert
-   Ceremonial Itinerary for Sarthak & Manya
+   Ceremonial Itinerary for Manya & Sarthak
    Mobile-First Architecture: 320px -> 360px -> 375px -> 390px -> 430px -> 640px+
    ========================================================================== */
 
@@ -437,6 +437,7 @@
   margin: 0;
   line-height: 1.25;
   letter-spacing: 0.01em;
+  overflow-wrap: break-word;
 }
 
 .details-sanskrit-tag {
