@@ -9,6 +9,7 @@ export const OurStorySection: React.FC = () => {
   const lineageRef = useRef<HTMLDivElement | null>(null);
   const centerpieceRef = useRef<HTMLDivElement | null>(null);
   const footnoteRef = useRef<HTMLDivElement | null>(null);
+  const storyVideoRef = useRef<HTMLVideoElement | null>(null);
 
   // Trigger optional flower petal burst when tapping couple frame or butterflies
   const handleArtTap = () => {
@@ -16,6 +17,14 @@ export const OurStorySection: React.FC = () => {
   };
 
   useEffect(() => {
+    if (storyVideoRef.current) {
+      storyVideoRef.current.defaultMuted = true;
+      storyVideoRef.current.muted = true;
+      storyVideoRef.current.play().catch(() => {
+        // Autoplay policy fallback: poster remains visible
+      });
+    }
+
     const card = cardRef.current;
     if (!card) return;
 
@@ -343,13 +352,21 @@ export const OurStorySection: React.FC = () => {
               <div className="story-inner-border">
                 {/* Image Container with Scalloped Arched Composition */}
                 <div className="story-image-canvas">
-                  {/* Bespoke Couple Artwork from Stitch */}
-                  <img
-                    src="/images/our-story-couple.webp"
-                    alt="Manya and Sarthak walking hand in hand in traditional wedding attire under a blooming royal botanical arch"
-                    className="story-couple-photo"
-                    loading="eager"
-                  />
+                  {/* Bespoke Couple Video */}
+                  <video
+                    ref={storyVideoRef}
+                    src="/videos/hero-wedding.mp4"
+                    poster="/images/our-story-couple.webp"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    className="story-couple-photo story-couple-video"
+                    aria-hidden="true"
+                  >
+                    <source src="/videos/hero-wedding.mp4" type="video/mp4" />
+                  </video>
 
                   {/* Inset Ring Hairline */}
                   <div className="story-ring-overlay" aria-hidden="true" />
