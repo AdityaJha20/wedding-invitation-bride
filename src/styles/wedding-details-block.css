@@ -526,3 +526,15 @@
   color: var(--wedding-secondary, #655d59);
   opacity: 0.75;
 }
+
+/* --------------------------------------------------------------------------
+   Personal Invitation Notice (shown without a valid personal invitation link)
+   -------------------------------------------------------------------------- */
+.invitation-notice-header {
+  margin-bottom: 4px;
+}
+
+.invitation-notice-message {
+  margin-top: 10px;
+  max-width: 34ch;
+}

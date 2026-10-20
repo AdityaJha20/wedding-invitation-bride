@@ -1,6 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import type { CelebrationEvent } from '../../utils/apiClient';
+import { buildCalendarLinks } from '../../utils/calendarLinks';
 
-export const VenueCelebrationSection: React.FC = () => {
+interface VenueCelebrationSectionProps {
+  // Permitted events for calendar export; without any, the calendar action is hidden
+  calendarEvents?: CelebrationEvent[];
+}
+
+const NO_EVENTS: CelebrationEvent[] = [];
+
+export const VenueCelebrationSection: React.FC<VenueCelebrationSectionProps> = ({
+  calendarEvents = NO_EVENTS,
+}) => {
   const [isCalOpen, setIsCalOpen] = useState(false);
   const calRef = useRef<HTMLDivElement>(null);
 
@@ -17,42 +28,18 @@ export const VenueCelebrationSection: React.FC = () => {
     };
   }, []);
 
-  // Google Calendar URL for 23 Nov 2026 to 24 Nov 2026
-  const googleCalUrl =
-    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' +
-    encodeURIComponent('Wedding Celebration of Manya & Sarthak') +
-    '&dates=20261123T043000Z/20261124T183000Z' +
-    '&details=' +
-    encodeURIComponent('Shagun, Mehendi, Haldi & Barat at Oodles Hotel Chhattarpur') +
-    '&location=' +
-    encodeURIComponent('Oodles Hotel Chhattarpur, New Delhi');
-
-  // Simple ICS data URI for Apple Calendar
-  const icsData = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Manya and Sarthak Wedding//EN',
-    'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
-    'SUMMARY:Wedding of Manya & Sarthak',
-    'DESCRIPTION:Shagun, Mehendi, Haldi & Barat',
-    'LOCATION:Oodles Hotel Chhattarpur, New Delhi',
-    'DTSTART:20261123T043000Z',
-    'DTEND:20261124T183000Z',
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ].join('\r\n');
-
-  const icsFileHref = `data:text/calendar;charset=utf8,${encodeURIComponent(icsData)}`;
-
-  const outlookCalUrl =
-    'https://outlook.live.com/calendar/0/deeplink/compose?subject=' +
-    encodeURIComponent('Wedding of Manya & Sarthak') +
-    '&startdt=2026-11-23T10:00:00&enddt=2026-11-24T23:59:00' +
-    '&body=' +
-    encodeURIComponent('Shagun, Mehendi, Haldi & Barat at Oodles Hotel Chhattarpur') +
-    '&location=' +
-    encodeURIComponent('Oodles Hotel Chhattarpur, New Delhi');
+  // Calendar exports include only the guest's permitted events
+  const calendarLinks = useMemo(
+    () =>
+      buildCalendarLinks({
+        events: calendarEvents,
+        title: 'Wedding of Manya & Sarthak',
+        googleTitle: 'Wedding Celebration of Manya & Sarthak',
+        location: 'Oodles Hotel Chhattarpur, New Delhi',
+        venueName: 'Oodles Hotel Chhattarpur',
+      }),
+    [calendarEvents]
+  );
 
   return (
     <section className="venue-celebration-section" id="venue-section">
@@ -128,60 +115,62 @@ export const VenueCelebrationSection: React.FC = () => {
           <span className="map-btn-text">SEE LOCATION ON THE MAP</span>
         </a>
 
-        {/* 6. Second Action: Book that date in your calendar */}
-        <div className="calendar-action-container" ref={calRef}>
-          <button
-            type="button"
-            className="calendar-invite-btn"
-            id="calendar-invite-btn"
-            onClick={() => setIsCalOpen((prev) => !prev)}
-            aria-expanded={isCalOpen}
-            aria-haspopup="true"
-          >
-            <span className="material-symbols-outlined cal-btn-icon">calendar_today</span>
-            <span className="cal-btn-text">Book that date in your calendar.</span>
-            <span className="material-symbols-outlined cal-chevron-icon">
-              {isCalOpen ? 'expand_less' : 'expand_more'}
-            </span>
-          </button>
+        {/* 6. Second Action: Book that date in your calendar (permitted events only) */}
+        {calendarLinks && (
+          <div className="calendar-action-container" ref={calRef}>
+            <button
+              type="button"
+              className="calendar-invite-btn"
+              id="calendar-invite-btn"
+              onClick={() => setIsCalOpen((prev) => !prev)}
+              aria-expanded={isCalOpen}
+              aria-haspopup="true"
+            >
+              <span className="material-symbols-outlined cal-btn-icon">calendar_today</span>
+              <span className="cal-btn-text">Book that date in your calendar.</span>
+              <span className="material-symbols-outlined cal-chevron-icon">
+                {isCalOpen ? 'expand_less' : 'expand_more'}
+              </span>
+            </button>
 
-          {isCalOpen && (
-            <div className="calendar-dropdown-menu" role="menu">
-              <a
-                href={googleCalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cal-menu-item"
-                role="menuitem"
-                onClick={() => setIsCalOpen(false)}
-              >
-                <span className="material-symbols-outlined cal-item-icon">event</span>
-                <span>Google Calendar</span>
-              </a>
-              <a
-                href={icsFileHref}
-                download="manya-sarthak-wedding.ics"
-                className="cal-menu-item"
-                role="menuitem"
-                onClick={() => setIsCalOpen(false)}
-              >
-                <span className="material-symbols-outlined cal-item-icon">phone_iphone</span>
-                <span>Apple Calendar (.ics)</span>
-              </a>
-              <a
-                href={outlookCalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cal-menu-item"
-                role="menuitem"
-                onClick={() => setIsCalOpen(false)}
-              >
-                <span className="material-symbols-outlined cal-item-icon">mail</span>
-                <span>Outlook Calendar</span>
-              </a>
-            </div>
-          )}
-        </div>
+            {isCalOpen && (
+              <div className="calendar-dropdown-menu" role="menu">
+                <a
+                  href={calendarLinks.googleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cal-menu-item"
+                  role="menuitem"
+                  onClick={() => setIsCalOpen(false)}
+                >
+                  <span className="material-symbols-outlined cal-item-icon">event</span>
+                  <span>Google Calendar</span>
+                </a>
+                <a
+                  href={calendarLinks.icsHref}
+                  download="manya-sarthak-wedding.ics"
+                  className="cal-menu-item"
+                  role="menuitem"
+                  onClick={() => setIsCalOpen(false)}
+                >
+                  <span className="material-symbols-outlined cal-item-icon">phone_iphone</span>
+                  <span>Apple Calendar (.ics)</span>
+                </a>
+                <a
+                  href={calendarLinks.outlookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cal-menu-item"
+                  role="menuitem"
+                  onClick={() => setIsCalOpen(false)}
+                >
+                  <span className="material-symbols-outlined cal-item-icon">mail</span>
+                  <span>Outlook Calendar</span>
+                </a>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 6. Subtle Invitation Monogram Sign-off */}

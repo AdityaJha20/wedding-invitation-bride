@@ -1,96 +1,17 @@
 import React, { useState } from 'react';
 import '../../styles/wedding-details-block.css';
+import type { CelebrationDay } from '../../utils/apiClient';
 
-interface CeremonyMoment {
-  id: string;
-  time: string;
-  title: string;
-  sanskrit: string;
-  subtitle: string;
-  icon: string;
+interface WeddingDetailsBlockProps {
+  // Only the events permitted by the guest's invitation, filtered by the server
+  schedule: CelebrationDay[];
 }
 
-interface CelebrationDay {
-  date: string;
-  dayOfWeek: string;
-  badge?: string;
-  events: CeremonyMoment[];
-}
-
-const CELEBRATION_SCHEDULE: CelebrationDay[] = [
-  {
-    date: '23 NOVEMBER 2026',
-    dayOfWeek: 'Monday',
-    events: [
-      {
-        id: 'shagun',
-        time: '5:00 PM',
-        title: 'Shagun',
-        sanskrit: '॥ शुभ आरंभ ॥',
-        subtitle: 'Sacred Family Blessings & Tilak',
-        icon: 'spa',
-      },
-      {
-        id: 'dinner-day1',
-        time: '9:00 PM',
-        title: 'Dinner',
-        sanskrit: '॥ प्रीतिभोज ॥',
-        subtitle: 'Royal Celebratory Feast',
-        icon: 'restaurant',
-      },
-      {
-        id: 'mehendi-sangeet',
-        time: '9:30 PM',
-        title: 'Mehendi / Sangeet',
-        sanskrit: '॥ संगीत उत्सव ॥',
-        subtitle: 'Henna, Melodies & Celebration',
-        icon: 'music_note',
-      },
-    ],
-  },
-  {
-    date: '24 NOVEMBER 2026',
-    dayOfWeek: 'Tuesday',
-    badge: 'MAIN EVENT',
-    events: [
-      {
-        id: 'breakfast',
-        time: '9:00 AM',
-        title: 'Breakfast',
-        sanskrit: '॥ प्रातः कलेवा ॥',
-        subtitle: 'Morning Delights & Chai',
-        icon: 'coffee',
-      },
-      {
-        id: 'haldi',
-        time: '10:00 AM',
-        title: 'Haldi / Bangle Ceremony',
-        sanskrit: '॥ हरिद्रा मंगलम् ॥',
-        subtitle: 'Sunlit Turmeric & Auspicious Rituals',
-        icon: 'flare',
-      },
-      {
-        id: 'lunch',
-        time: '1:00 PM',
-        title: 'Lunch',
-        sanskrit: '॥ आनंद भोजन ॥',
-        subtitle: 'Traditional Midday Feast',
-        icon: 'restaurant',
-      },
-      {
-        id: 'barat',
-        time: '8:00 PM',
-        title: 'Barat',
-        sanskrit: '॥ विवाह संस्कार ॥',
-        subtitle: 'The Grand Procession & Sacred Vows',
-        icon: 'celebration',
-      },
-    ],
-  },
-];
-
-export const WeddingDetailsBlock: React.FC = () => {
-  const [activeEventId, setActiveEventId] = useState<string>('shagun');
+export const WeddingDetailsBlock: React.FC<WeddingDetailsBlockProps> = ({ schedule }) => {
+  // Highlight the first permitted event (Shagun when the guest is invited to it)
+  const [activeEventId, setActiveEventId] = useState<string>(
+    () => schedule[0]?.events[0]?.id ?? ''
+  );
 
   return (
     <section className="wedding-details-section" id="wedding-celebrations" aria-label="Wedding Celebrations Schedule">
@@ -115,7 +36,7 @@ export const WeddingDetailsBlock: React.FC = () => {
 
         {/* Ceremonial Journey Timeline */}
         <div className="details-days-group">
-          {CELEBRATION_SCHEDULE.map((day, dayIndex) => (
+          {schedule.map((day, dayIndex) => (
             <div key={day.date} className="details-day-section">
               {/* Distinct Date Chapter Header */}
               <div className={`details-day-header ${day.badge ? 'main-event-day' : ''}`}>
@@ -176,8 +97,8 @@ export const WeddingDetailsBlock: React.FC = () => {
                 })}
               </div>
 
-              {/* Delicate Chapter Divider between 23 Nov and 24 Nov */}
-              {dayIndex === 0 && (
+              {/* Delicate Chapter Divider between consecutive celebration days */}
+              {dayIndex < schedule.length - 1 && (
                 <div className="details-chapter-divider" aria-hidden="true">
                   <span className="details-divider-line" />
                   <span className="details-divider-symbol">❦</span>
