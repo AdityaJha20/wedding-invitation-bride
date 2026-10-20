@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../../styles/admin.css';
 import { apiClient, WishRecord } from '../../utils/apiClient';
+import { InvitationManager } from './InvitationManager';
+
+type DashboardTab = 'blessings' | 'invitations';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -16,6 +19,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [wishes, setWishes] = useState<WishRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Remember the open section in the URL hash so a refresh keeps it
+  const [activeTab, setActiveTab] = useState<DashboardTab>(() =>
+    window.location.hash === '#invitations' ? 'invitations' : 'blessings'
+  );
+
+  const selectTab = (tab: DashboardTab) => {
+    setActiveTab(tab);
+    window.history.replaceState(
+      window.history.state,
+      '',
+      tab === 'invitations' ? '#invitations' : window.location.pathname
+    );
+  };
 
   const fetchWishes = useCallback(async () => {
     setLoading(true);
@@ -77,14 +93,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {/* Dashboard Header Bar */}
         <header className="admin-dashboard-header">
           <div className="admin-brand">
-            <h1>Guest Blessings</h1>
+            <h1>{activeTab === 'invitations' ? 'Guest Invitations' : 'Guest Blessings'}</h1>
             <p>Manya &amp; Sarthak Wedding</p>
           </div>
 
           <div className="admin-actions">
-            <span className="admin-badge" aria-label="Total blessings received">
-              {wishes.length} {wishes.length === 1 ? 'Wish' : 'Wishes'}
-            </span>
+            {activeTab === 'blessings' && (
+              <span className="admin-badge" aria-label="Total blessings received">
+                {wishes.length} {wishes.length === 1 ? 'Wish' : 'Wishes'}
+              </span>
+            )}
             <button
               type="button"
               className="admin-logout-btn"
@@ -96,8 +114,32 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         </header>
 
+        {/* Section Tabs */}
+        <nav className="admin-tabs" role="tablist" aria-label="Dashboard sections">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'blessings'}
+            className={`admin-tab ${activeTab === 'blessings' ? 'is-active' : ''}`}
+            onClick={() => selectTab('blessings')}
+          >
+            Blessings
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'invitations'}
+            className={`admin-tab ${activeTab === 'invitations' ? 'is-active' : ''}`}
+            onClick={() => selectTab('invitations')}
+          >
+            Invitations
+          </button>
+        </nav>
+
         {/* Content Body */}
-        {loading ? (
+        {activeTab === 'invitations' ? (
+          <InvitationManager onRequireLogin={onRequireLogin} />
+        ) : loading ? (
           <div className="admin-loading-container" role="status">
             <div className="admin-spinner" />
             <p style={{ color: '#775a19', fontSize: 13, fontFamily: 'Cinzel, serif' }}>

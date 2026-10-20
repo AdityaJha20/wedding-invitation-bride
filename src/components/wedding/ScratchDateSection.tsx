@@ -76,7 +76,19 @@ const computeHeartSamplePoints = (w: number, h: number): { x: number; y: number 
   return points;
 };
 
-export const ScratchDateSection: React.FC = () => {
+// "24 NOVEMBER 2026" -> "24 November 2026" for the celebration banner
+const toTitleCaseDate = (date: string): string =>
+  date
+    .split(' ')
+    .map((word) => (word ? word.charAt(0) + word.slice(1).toLowerCase() : word))
+    .join(' ');
+
+interface ScratchDateSectionProps {
+  // Date revealed under the foil, taken from the guest's own celebration days
+  revealDate: string;
+}
+
+export const ScratchDateSection: React.FC<ScratchDateSectionProps> = ({ revealDate }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const heartFrameRef = useRef<HTMLDivElement | null>(null);
@@ -587,7 +599,7 @@ export const ScratchDateSection: React.FC = () => {
                 <span className="material-symbols-outlined calendar-glyph">calendar_month</span>
               </div>
               <span className="revealed-save-date">Save The Date</span>
-              <h3 className="revealed-wedding-date">24 NOVEMBER 2026</h3>
+              <h3 className="revealed-wedding-date">{revealDate}</h3>
             </div>
 
             {/* INTERACTIVE CANVAS OVERLAY FOR SCRATCHING */}
@@ -621,7 +633,7 @@ export const ScratchDateSection: React.FC = () => {
           {/* Joyful Celebration Banner upon Reveal */}
           {showCelebration && (
             <div className="scratch-celebration-banner" role="status" aria-live="polite">
-              🌸 Mark your calendars for 24 November 2026! We cannot wait to celebrate together! 🌸
+              🌸 Mark your calendars for {toTitleCaseDate(revealDate)}! We cannot wait to celebrate together! 🌸
             </div>
           )}
         </div>

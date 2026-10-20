@@ -270,3 +270,73 @@ Retrieves all submitted guest blessings ordered with newest submissions first. R
   ]
 }
 ```
+
+---
+
+## 9. Personalized Guest Invitations
+
+Each guest receives a private link, `/invite/<token>`, that shows only the celebrations chosen for them. The event catalog lives on the server (`server/config/events.ts`) and is never shipped to the browser in full: the server filters it before responding, so hidden events, dates and calendar entries never reach a guest. Visitors opening `/` without a personal link see the invitation artwork and a note asking them to open their personal link.
+
+Invitations are stored in the `invitations` collection of the existing database connection. Tokens are 192-bit random values with a unique index. Revoking an invitation or generating a new link disables the previous link immediately.
+
+### Public Endpoint
+
+#### `GET /api/invitations/:token`
+Returns only the schedule permitted for this invitation. Rate-limited and sent with `Cache-Control: no-store` and `X-Robots-Tag: noindex, nofollow`.
+- **Response**: `200 OK`
+```json
+{
+  "success": true,
+  "invitation": {
+    "schedule": [
+      {
+        "date": "24 NOVEMBER 2026",
+        "isoDate": "2026-11-24",
+        "dayOfWeek": "Tuesday",
+        "badge": "MAIN EVENT",
+        "events": [
+          {
+            "id": "barat",
+            "time": "8:00 PM",
+            "title": "Barat",
+            "sanskrit": "॥ विवाह संस्कार ॥",
+            "subtitle": "The Grand Procession & Sacred Vows",
+            "icon": "celebration",
+            "startsAt": "2026-11-24T20:00:00+05:30"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+- **Unknown, malformed, revoked or replaced token**: `404 Not Found` with an identical body in every case:
+```json
+{ "success": false, "message": "Invitation not found." }
+```
+
+### Admin Endpoints (require `admin_token` cookie)
+
+Mutating requests must be sent as `application/json` (otherwise `415`).
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/api/admin/events` | Full event catalog and the Family / Close Friends / Friends / Colleagues presets |
+| `GET` | `/api/admin/invitations` | All invitations, newest first (includes tokens and private notes) |
+| `POST` | `/api/admin/invitations` | Create `{ "guestName", "allowedEventIds": [...], "notes" }` |
+| `GET` | `/api/admin/invitations/:id` | A single invitation |
+| `PUT` | `/api/admin/invitations/:id` | Edit guest name, events and notes (the link stays the same) |
+| `GET` | `/api/admin/invitations/:id/preview` | The guest's filtered schedule; works for revoked invitations and does not count as a visit |
+| `POST` | `/api/admin/invitations/:id/revoke` | Disable the link immediately |
+| `POST` | `/api/admin/invitations/:id/regenerate` | Issue a new link; the old one stops working (a revoked invitation becomes active again with the new link) |
+
+`allowedEventIds` must contain at least one of: `shagun`, `dinner-day1`, `mehendi-sangeet`, `breakfast`, `haldi`, `lunch`, `barat`. Duplicates are removed and events are stored in schedule order.
+
+### Testing
+
+The invitation tests (`tests/invitations.test.ts`) include direct-URL and bundle checks that read `dist/`, so build first:
+
+```bash
+npm run build
+npm test
+```

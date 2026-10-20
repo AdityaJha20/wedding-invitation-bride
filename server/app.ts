@@ -8,6 +8,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import wishRoutes from './routes/wishRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import invitationRoutes from './routes/invitationRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 // Load environment variables
@@ -79,6 +80,7 @@ export const createApp = (): Application => {
   // API Routes
   app.use('/api/wishes', wishRoutes);
   app.use('/api/admin', adminRoutes);
+  app.use('/api/invitations', invitationRoutes);
 
   // Catch-all 404 for unmatched /api routes (ensures /api/* is NEVER swallowed by SPA fallback)
   app.use('/api', notFoundHandler);
@@ -102,6 +104,11 @@ export const createApp = (): Application => {
       // Hard guard: double check that no /api requests reach here
       if (req.path.startsWith('/api')) {
         return notFoundHandler(req, res);
+      }
+      // Personal invitation and admin pages must never be cached or indexed
+      if (req.path.startsWith('/invite/') || req.path.startsWith('/admin')) {
+        res.set('Cache-Control', 'no-store');
+        res.set('X-Robots-Tag', 'noindex, nofollow');
       }
       if (fs.existsSync(indexPath)) {
         res.sendFile(indexPath);

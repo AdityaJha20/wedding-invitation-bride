@@ -14,6 +14,51 @@ export interface WishRecord {
   createdAt: string;
 }
 
+// A single celebration moment, as delivered by the server for one invitation
+export interface CelebrationEvent {
+  id: string;
+  time: string;
+  title: string;
+  sanskrit: string;
+  subtitle: string;
+  icon: string;
+  startsAt: string;
+}
+
+export interface CelebrationDay {
+  date: string;
+  isoDate: string;
+  dayOfWeek: string;
+  badge?: string;
+  events: CelebrationEvent[];
+}
+
+export interface InvitationPreset {
+  id: string;
+  label: string;
+  eventIds: string[];
+}
+
+export interface InvitationRecord {
+  id: string;
+  guestName: string;
+  allowedEventIds: string[];
+  token: string;
+  isActive: boolean;
+  revokedAt: string | null;
+  notes: string;
+  viewCount: number;
+  lastViewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InvitationInput {
+  guestName: string;
+  allowedEventIds: string[];
+  notes: string;
+}
+
 const getBaseUrl = (): string => {
   const url = import.meta.env.VITE_API_BASE_URL;
   if (!url) return '';
@@ -46,6 +91,7 @@ const request = async <T = any>(
     if (!res.ok) {
       return {
         success: false,
+        status: res.status,
         message: data?.message || `Request failed with status ${res.status}`,
       };
     }
@@ -96,6 +142,75 @@ export const apiClient = {
   getAdminWishes: async (): Promise<ApiResponse<{ wishes: WishRecord[]; count: number }>> => {
     return request('/api/admin/wishes', {
       method: 'GET',
+    });
+  },
+
+  // Public Personalized Invitation (only the guest's permitted events)
+  getInvitation: async (
+    token: string
+  ): Promise<ApiResponse<{ invitation: { schedule: CelebrationDay[] } }>> => {
+    return request(`/api/invitations/${encodeURIComponent(token)}`, {
+      method: 'GET',
+    });
+  },
+
+  // Admin Invitation Management
+  getAdminEvents: async (): Promise<
+    ApiResponse<{ days: CelebrationDay[]; presets: InvitationPreset[] }>
+  > => {
+    return request('/api/admin/events', {
+      method: 'GET',
+    });
+  },
+
+  getAdminInvitations: async (): Promise<
+    ApiResponse<{ invitations: InvitationRecord[]; count: number }>
+  > => {
+    return request('/api/admin/invitations', {
+      method: 'GET',
+    });
+  },
+
+  createInvitation: async (
+    input: InvitationInput
+  ): Promise<ApiResponse<{ invitation: InvitationRecord }>> => {
+    return request('/api/admin/invitations', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+  },
+
+  updateInvitation: async (
+    id: string,
+    input: InvitationInput
+  ): Promise<ApiResponse<{ invitation: InvitationRecord }>> => {
+    return request(`/api/admin/invitations/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+  },
+
+  previewInvitation: async (
+    id: string
+  ): Promise<ApiResponse<{ invitation: { schedule: CelebrationDay[] } }>> => {
+    return request(`/api/admin/invitations/${encodeURIComponent(id)}/preview`, {
+      method: 'GET',
+    });
+  },
+
+  revokeInvitation: async (id: string): Promise<ApiResponse<{ invitation: InvitationRecord }>> => {
+    return request(`/api/admin/invitations/${encodeURIComponent(id)}/revoke`, {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  },
+
+  regenerateInvitation: async (
+    id: string
+  ): Promise<ApiResponse<{ invitation: InvitationRecord }>> => {
+    return request(`/api/admin/invitations/${encodeURIComponent(id)}/regenerate`, {
+      method: 'POST',
+      body: JSON.stringify({}),
     });
   },
 };

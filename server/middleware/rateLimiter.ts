@@ -13,6 +13,17 @@ export const loginLimiter = rateLimit({
   },
 });
 
+export const invitationLookupLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: isTest ? 1000 : 300, // Generous for guests sharing a network (e.g. venue Wi-Fi)
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many requests. Please wait a moment and try again.',
+  },
+});
+
 export const wishSubmissionLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: isTest ? 1000 : 30, // 30 wishes per 10 min window
